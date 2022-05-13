@@ -4,7 +4,6 @@ import ForceGraph2D from 'react-force-graph-2d';
 import { NeuralNetwork } from './snn'
 
 const createGraphData = (network) => {
-    console.log("createGraphData", network)
     if (!network) {
         return;
     }
@@ -114,10 +113,7 @@ function ForceGraph() {
     const NODE_R = 8;
     return (
         <>
-
             <button onClick={stopNetowrk}>Stop</button>
-
-
             <ForceGraph2D
                 graphData={graphData}
                 nodeLabel="id"
