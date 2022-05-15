@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
+import NetworkControls from "./NetworkControls";
 import { NeuralNetwork } from "./snn";
 
 const createGraphData = (network) => {
@@ -73,10 +74,11 @@ function ForceGraph() {
   const [network, setNeuralNetwork] = useState(undefined);
 
   // Network parameters
-  const [synapseAvgPerNeuron, setSynapseAvgPerNeuron] = useState(undefined);
-  const [signalMaxFireDelay, setSignalMaxFireDelay] = useState(undefined);
-  const [signalRecoveryDelay, setSignalRecoveryDelay] = useState(undefined);
-  const [signalFireThreshold, SetSignalFireThreshold] = useState(undefined);
+  const [numberOfNeurons, setNumberOfNeurons] = useState(10);
+  const [synapseAvgPerNeuron, setSynapseAvgPerNeuron] = useState(4);
+  const [signalMaxFireDelay, setSignalMaxFireDelay] = useState(200);
+  const [signalRecoveryDelay, setSignalRecoveryDelay] = useState(1250);
+  const [signalFireThreshold, SetSignalFireThreshold] = useState(0.3);
 
   // Visualization attributes
   const [graphData, setGraphData] = useState({ nodes: [{ id: 0 }], links: [] });
@@ -87,10 +89,17 @@ function ForceGraph() {
   }, []);
 
   const initializeNetwork = () => {
-    setNeuralNetwork(new NeuralNetwork(100, "ball", 4, 200, 1250, 0.3));
-
+    setNeuralNetwork(
+      new NeuralNetwork(
+        numberOfNeurons,
+        "ball",
+        synapseAvgPerNeuron,
+        signalMaxFireDelay,
+        signalRecoveryDelay,
+        signalFireThreshold
+      )
+    );
   };
-
 
   const createForceGraph = () => {
     initializeNetwork();
@@ -102,7 +111,6 @@ function ForceGraph() {
   };
 
   const handleNodeClick = (node) => {
-    console.log(network);
     network.fire(node.id);
 
     for (const node of network.nodes) {
@@ -133,8 +141,20 @@ function ForceGraph() {
   const NODE_R = 8;
   return (
     <>
-      <button className="btn btn-primary" onClick={createForceGraph}>Initialize</button>
-      <button onClick={stopNetowrk}>Stop</button>
+      <NetworkControls
+        numberOfNeurons={numberOfNeurons}
+        synapseAvgPerNeuron={synapseAvgPerNeuron}
+        signalMaxFireDelay={signalMaxFireDelay}
+        signalRecoveryDelay={signalRecoveryDelay}
+        signalFireThreshold={signalFireThreshold}
+        setNumberOfNeurons={setNumberOfNeurons}
+        setSynapseAvgPerNeuron={setSynapseAvgPerNeuron}
+        setSignalMaxFireDelay={setSignalMaxFireDelay}
+        setSignalRecoveryDelay={setSignalRecoveryDelay}
+        SetSignalFireThreshold={SetSignalFireThreshold}
+        createForceGraph={createForceGraph}
+        stopNetwork={stopNetowrk}
+      />
       <ForceGraph2D
         graphData={graphData}
         nodeLabel="id"
