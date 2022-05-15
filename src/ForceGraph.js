@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
-import NetworkControls from "./NetworkControls";
 import { NeuralNetwork } from "./snn";
 
 const createGraphData = (network) => {
@@ -141,20 +140,78 @@ function ForceGraph() {
   const NODE_R = 8;
   return (
     <>
-      <NetworkControls
-        numberOfNeurons={numberOfNeurons}
-        synapseAvgPerNeuron={synapseAvgPerNeuron}
-        signalMaxFireDelay={signalMaxFireDelay}
-        signalRecoveryDelay={signalRecoveryDelay}
-        signalFireThreshold={signalFireThreshold}
-        setNumberOfNeurons={setNumberOfNeurons}
-        setSynapseAvgPerNeuron={setSynapseAvgPerNeuron}
-        setSignalMaxFireDelay={setSignalMaxFireDelay}
-        setSignalRecoveryDelay={setSignalRecoveryDelay}
-        SetSignalFireThreshold={SetSignalFireThreshold}
-        createForceGraph={createForceGraph}
-        stopNetwork={stopNetowrk}
-      />
+      <div className="d-flex">
+        <div id="network-controls">
+          <div className="d-flex">
+            <div className="form-group">
+              <label>Number of Neurons</label>
+              <input
+                type="number"
+                className="form-control"
+                id="synapseAvgPerNeuron"
+                value={numberOfNeurons}
+                onChange={(e) => setNumberOfNeurons(parseInt(e.target.value))()}
+              />
+            </div>
+            <div className="form-group ms-1">
+              <label>Avg. Synapes per Neuron</label>
+              <input
+                type="number"
+                className="form-control"
+                id="synapseAvgPerNeuron"
+                value={synapseAvgPerNeuron}
+                onChange={(e) =>
+                  setSynapseAvgPerNeuron(parseInt(e.target.value))()
+                }
+              />
+            </div>
+            <div className="form-group ms-1">
+              <label>Max. Signal Fire Delay</label>
+              <input
+                type="number"
+                className="form-control"
+                id="signalMaxFireDelay"
+                value={signalMaxFireDelay}
+                onChange={(e) =>
+                  setSignalMaxFireDelay(parseInt(e.target.value))()
+                }
+              />
+            </div>
+            <div className="form-group ms-1">
+              <label>Signal Recovery Delay</label>
+              <input
+                type="number"
+                className="form-control"
+                id="signalRecoveryDelay"
+                value={signalRecoveryDelay}
+                onChange={(e) =>
+                  setSignalRecoveryDelay(parseInt(e.target.value))()
+                }
+              />
+            </div>
+            <div className="form-group ms-1">
+              <label>Signal Fire Threshold</label>
+              <input
+                type="number"
+                className="form-control"
+                id="signalFireThreshold"
+                value={signalFireThreshold}
+                onChange={(e) =>
+                  SetSignalFireThreshold(parseFloat(e.target.value))()
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <span>
+          <button className="btn btn-primary ms-1" onClick={createForceGraph}>
+            Initialize
+          </button>
+          <button className="btn btn-secondary ms-1" onClick={stopNetowrk}>
+            Stop
+          </button>
+        </span>
+      </div>
       <ForceGraph2D
         graphData={graphData}
         nodeLabel="id"
