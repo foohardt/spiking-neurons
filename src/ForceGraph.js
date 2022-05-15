@@ -141,8 +141,8 @@ function ForceGraph() {
   const NODE_R = 8;
   return (
     <div className="container-fluid">
-      <div className="d-flex justify-content-center">
-        <div id="network-controls">
+      <div id="network-controls" className="d-flex justify-content-center">
+        <div>
           <div className="d-flex">
             <div className="form-group">
               <label>Number of Neurons</label>
@@ -221,7 +221,7 @@ function ForceGraph() {
           <small className="text-muted">
             Enter network paramaters and click{" "}
             <b>
-              <i>Initialize Network</i>
+              <i>Initiali Network</i>
             </b>{" "}
             to create spiking neural network
           </small>
