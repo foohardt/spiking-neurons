@@ -1,5 +1,3 @@
-//import 'bootswatch/dist/lumen/bootstrap.min.css';
-
 import './App.css';
 
 import ForceGraph from './ForceGraph';

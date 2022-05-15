@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 
 import { NeuralNetwork } from "./snn";
 
 const createGraphData = (network) => {
+  console.log("createGraphData", network);
   if (!network) {
     return;
   }
@@ -80,12 +81,8 @@ function ForceGraph() {
   const [signalFireThreshold, SetSignalFireThreshold] = useState(0.3);
 
   // Visualization attributes
-  const [graphData, setGraphData] = useState({ nodes: [{ id: 0 }], links: [] });
+  const [graphData, setGraphData] = useState(undefined);
   const [nodesOnFire, setNodesOnFire] = useState(new Set());
-
-  useEffect(() => {
-    createForceGraph();
-  }, []);
 
   const initializeNetwork = () => {
     setNeuralNetwork(
@@ -101,8 +98,8 @@ function ForceGraph() {
   };
 
   const createForceGraph = () => {
-    initializeNetwork();
-    setGraphData(createGraphData(network));
+    let graphData = createGraphData(network);
+    setGraphData(graphData);
   };
 
   const stopNetowrk = () => {
@@ -140,7 +137,7 @@ function ForceGraph() {
   const NODE_R = 8;
   return (
     <>
-      <div className="d-flex">
+      <div className="d-flex justify-content-center">
         <div id="network-controls">
           <div className="d-flex">
             <div className="form-group">
@@ -203,11 +200,14 @@ function ForceGraph() {
             </div>
           </div>
         </div>
-        <span>
-          <button className="btn btn-primary ms-1" onClick={createForceGraph}>
-            Initialize
+        <span className="align-self-end">
+          <button className="btn btn-primary ms-1" onClick={initializeNetwork}>
+            Initialize Network
           </button>
-          <button className="btn btn-secondary ms-1" onClick={stopNetowrk}>
+          <button className="btn btn-success ms-1" onClick={createForceGraph}>
+            Render
+          </button>
+          <button className="btn btn-warning ms-1" onClick={stopNetowrk}>
             Stop
           </button>
         </span>
