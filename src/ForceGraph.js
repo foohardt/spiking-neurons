@@ -221,7 +221,7 @@ function ForceGraph() {
           <small className="text-muted">
             Enter network paramaters and click{" "}
             <b>
-              <i>Initiali Network</i>
+              <i>Initialize Network</i>
             </b>{" "}
             to create spiking neural network
           </small>
