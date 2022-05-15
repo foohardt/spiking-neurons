@@ -22,16 +22,20 @@ export class NeuralNetwork extends EventEmitter {
     //   {id: 5, s: [{t: 6, w: 0.92}, {t: 2, w: 0.41}] },
     //   {id: 6, s: [{t: 2, w: 0.41}] }
     // ]})
-    constructor(size, shape) {
+    constructor(size, shape, synapseAvgPerNeuron, signalMaxFireDelay, signalRecoveryDelay, signalFireThreshold) {
         super();
         this.shape = shape || NETWORK_DEFAULT_SHAPE;
+        this.synapseAvgPerNeuron = synapseAvgPerNeuron || SYNAPSE_AVG_PER_NEURON;
+        this.signalMaxFireDelay = signalMaxFireDelay || SIGNAL_MAX_FIRE_DELAY;
+        this.signalRecoveryDelay = signalRecoveryDelay || SIGNAL_RECOVERY_DELAY;
+        this.signalFireThreshold = signalFireThreshold || SIGNAL_FIRE_THRESHOLD;
         this.nodes = [];
         this.channels = [];
         if (typeof size === 'number') {
             // Initialize with size
             this.nodes = new Array(size)
                 .fill()
-                .map((n, i) => Neuron.random(i, size, shape));
+                .map((n, i) => Neuron.random(i, size, shape, this.synapseAvgPerNeuron, this.signalMaxFireDelay, this.signalRecoveryDelay, this.signalFireThreshold));
         }
         else if (size && size.nodes && size.nodes instanceof Array) {
             // Initialize with exported network
@@ -173,17 +177,21 @@ export class NeuralNetwork extends EventEmitter {
 
 class Neuron extends EventEmitter {
 
-    constructor(synapses, index) {
+    constructor(synapses, index, signalMaxFireDelay, signalRecoveryDelay,signalFireThreshold) {
         super();
         this.synapses = synapses || [];
         this.id = index > -1 ? index : Random.alpha(6);
         this.potential = 0;
+
+        this.signalMaxFireDelay = signalMaxFireDelay;
+        this.signalRecoveryDelay = signalRecoveryDelay;
+        this.signalFireThreshold = signalFireThreshold;
     }
 
     // Generates a random neuron
-    static random(position, networkSize, shape) {
+    static random(position, networkSize, shape, synapseAvgPerNeuron, signalMaxFireDelay, signalRecoveryDelay, signalFireThreshold) {
         // Number of synapses are random based on average
-        var synapses = new Array(Random.integer(1, SYNAPSE_AVG_PER_NEURON * 2 - 1))
+        var synapses = new Array(Random.integer(1, synapseAvgPerNeuron * 2 - 1))
             .fill()
             .map(() => {
                 var shaper = NetworkShapes[shape],
@@ -197,7 +205,7 @@ class Neuron extends EventEmitter {
                 return null;
             })
             .filter(s => !!s);
-        return new Neuron(synapses, position);
+        return new Neuron(synapses, position, signalMaxFireDelay, signalRecoveryDelay, signalFireThreshold);
     }
 
     // Should be optimised as this gets executed very frequently.
@@ -207,8 +215,9 @@ class Neuron extends EventEmitter {
         // certain patterns can trigger even
         // weak synapses.
         this.potential += potential || 1;
+        console.log(this.signalFireThreshold)
         setTimeout(() => this.potential -= potential, SIGNAL_RECOVERY_DELAY / 2);
-        if (this.potential > SIGNAL_FIRE_THRESHOLD) {
+        if (this.potential > this.signalFireThreshold) {
             // Fire signal
             this.isfiring = true;
             this.emit('fire', this.id);
@@ -221,7 +230,7 @@ class Neuron extends EventEmitter {
                             // Avoid epileptic spasm by tracking when last fired
                             synapse.l = new Date().getTime();
                         }
-                    }, Math.round(SIGNAL_MAX_FIRE_DELAY * (1 - synapse.w)));
+                    }, Math.round(this.signalMaxFireDelay * (1 - synapse.w)));
 
                 }
             });
