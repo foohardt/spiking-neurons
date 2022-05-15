@@ -81,6 +81,7 @@ function ForceGraph() {
   const [signalFireThreshold, SetSignalFireThreshold] = useState(0.3);
 
   // Visualization attributes
+  const [isInitialized, setIsInitialized] = useState(false);
   const [graphData, setGraphData] = useState(undefined);
   const [nodesOnFire, setNodesOnFire] = useState(new Set());
 
@@ -95,11 +96,14 @@ function ForceGraph() {
         signalFireThreshold
       )
     );
+
+    setIsInitialized(true);
   };
 
   const createForceGraph = () => {
     let graphData = createGraphData(network);
     setGraphData(graphData);
+    setIsInitialized(false);
   };
 
   const stopNetowrk = () => {
@@ -136,7 +140,7 @@ function ForceGraph() {
 
   const NODE_R = 8;
   return (
-    <>
+    <div className="container-fluid">
       <div className="d-flex justify-content-center">
         <div id="network-controls">
           <div className="d-flex">
@@ -207,10 +211,30 @@ function ForceGraph() {
           <button className="btn btn-success ms-1" onClick={createForceGraph}>
             Render
           </button>
-          <button className="btn btn-warning ms-1" onClick={stopNetowrk}>
-            Stop
+          <button className="btn btn-danger ms-1" onClick={stopNetowrk}>
+            Stop Spiking
           </button>
         </span>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        {!isInitialized && !graphData && (
+          <small className="text-muted">
+            Enter network paramaters and click{" "}
+            <b>
+              <i>Initialize Network</i>
+            </b>{" "}
+            to create spiking neural network
+          </small>
+        )}
+        {isInitialized && (
+          <small className="text-muted">
+            Network initialized. Click{" "}
+            <b>
+              <i>Render</i>
+            </b>{" "}
+            render to visualization
+          </small>
+        )}
       </div>
       <ForceGraph2D
         graphData={graphData}
@@ -221,7 +245,7 @@ function ForceGraph() {
         linkDirectionalParticleSpeed={(d) => d.value * 0.01}
         onNodeClick={handleNodeClick}
       />
-    </>
+    </div>
   );
 }
 
