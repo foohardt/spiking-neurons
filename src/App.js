@@ -1,11 +1,11 @@
 import './App.css';
 
-import ForceGraph from './ForceGraph';
+import NetworkSimulator from './NetworkSimulator';
 
 function App() {
   return (
     <div className="App">
-      <ForceGraph />
+      <NetworkSimulator />
     </div>
   );
 }

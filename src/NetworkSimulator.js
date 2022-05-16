@@ -4,7 +4,6 @@ import ForceGraph2D from "react-force-graph-2d";
 import { NeuralNetwork } from "./snn";
 
 const createGraphData = (network) => {
-  console.log("createGraphData", network);
   if (!network) {
     return;
   }
@@ -122,7 +121,6 @@ function ForceGraph() {
       setNodesOnFire(nodesOnFire);
 
       node.on("ready", function (id) {
-        //console.log("ready", id)
         nodesOnFire.clear();
       });
 
@@ -209,10 +207,10 @@ function ForceGraph() {
             Initialize Network
           </button>
           <button className="btn btn-success ms-1" onClick={createForceGraph}>
-            Render
+            Render Network
           </button>
           <button className="btn btn-danger ms-1" onClick={stopNetowrk}>
-            Stop Spiking
+            Stop Network Activity
           </button>
         </span>
       </div>
