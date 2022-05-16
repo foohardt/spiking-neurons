@@ -148,7 +148,6 @@ export class NeuralNetwork extends EventEmitter {
     }
 
     // Fire a neuron, used for testing and visualization
-    // network.fire(24);
     fire(id) {
         if (id && this.nodes[id]) {
             this.nodes[id].fire();
@@ -215,7 +214,6 @@ class Neuron extends EventEmitter {
         // certain patterns can trigger even
         // weak synapses.
         this.potential += potential || 1;
-        console.log(this.signalFireThreshold)
         setTimeout(() => this.potential -= potential, SIGNAL_RECOVERY_DELAY / 2);
         if (this.potential > this.signalFireThreshold) {
             // Fire signal

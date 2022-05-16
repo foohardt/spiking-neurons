@@ -68,7 +68,7 @@ const createGraphData = (network) => {
   return graphData;
 };
 
-function ForceGraph() {
+const NetworkSimulator = () => {
   // Spiking neural network
   const [network, setNeuralNetwork] = useState(undefined);
 
@@ -113,15 +113,14 @@ function ForceGraph() {
     network.fire(node.id);
 
     for (const node of network.nodes) {
-      node.on("fire", function (id) {
-        console.info("fire", node.id, node.potential, node);
+      node.on("fire", (id) => {
         nodesOnFire.add(id);
       });
 
       setNodesOnFire(nodesOnFire);
 
-      node.on("ready", function (id) {
-        nodesOnFire.clear();
+      node.on("ready", (id) => {
+        nodesOnFire.delete(id);
       });
 
       setNodesOnFire(nodesOnFire);
@@ -134,6 +133,10 @@ function ForceGraph() {
         return "#FF0000";
       }
     }
+  };
+
+  const learn = () => {
+    console.log(network.learn(1));
   };
 
   const NODE_R = 8;
@@ -212,6 +215,7 @@ function ForceGraph() {
           <button className="btn btn-danger ms-1" onClick={stopNetowrk}>
             Stop Network Activity
           </button>
+          <button onClick={learn}>Lernen</button>
         </span>
       </div>
       <div className="d-flex justify-content-center mt-3">
@@ -247,4 +251,4 @@ function ForceGraph() {
   );
 }
 
-export default ForceGraph;
+export default NetworkSimulator;
