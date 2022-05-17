@@ -17,9 +17,7 @@ events | events is a library, which implements the Node.js events module for the
 
 ## Technical Documentation
 
-This section contains an overview about the project structure, it's components and their crucial functions. 
-
-### Project Structure
+This section contains an overview about crucial project components and their crucial functions and attributes. 
 
 ### Spiking Neural Network
 
@@ -41,6 +39,7 @@ Name | Type | Description |
 
 
 #### Neuron
+
 Name | Type | Description | 
 --- | --- | --- | 
 `Neuron` | Class | Extends `EventEmitter`. Is instantiated by `NeuraNetwork` to implement network neurons | 
@@ -50,12 +49,13 @@ Name | Type | Description |
 `signalMaxFireDelay` | Class Variable | Timeout in `ms` neuron takes after spiking |
 `signalRecoveryDelay` | Class Variable | Time in `ms` neurons take to recover after spiking |
 `signalFireThreshold` | Class Variable | Neuronal threshold for action potential |
-`fire()` | Function | Function to fire neuron |
+`fire(potential)` | Function | Function to fire neuron and increase neuronal potential |
 
 ### Network Simulator
 
 Name | Type | Description | 
 --- | --- | --- | 
- | | | 
+`createGraphData(network)` | Function | Takes the spiking neural network as parameter. Maps neurons and their attributes to force graph data | 
+`NetworkSimulator() | React Component | Instantiates spiking neural Network and holds application state. Implements user interface and user interaction. Render 2D force graph |
 
 ## Experiments & Results
