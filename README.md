@@ -1,3 +1,10 @@
-<h1>Spiking Neurons</h1>
+# Spiking Neurons
 
-This is an experimental visualization of a spiking neural network.
+## Introduction
+Spiking Neurons is an experimental visualization of a spiking neural network run in the web browser.
+
+## Dependencies
+
+## Implementation
+
+## Experiments & Results
