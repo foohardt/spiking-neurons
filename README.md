@@ -51,7 +51,7 @@ Name | Type | Description |
 `signalFireThreshold` | Class Variable | Neuronal threshold for action potential |
 `fire(potential)` | Function | Function to fire neuron and increase neuronal potential |
 
-### Network Simulator
+#### Network Simulator
 
 Name | Type | Description | 
 --- | --- | --- | 
