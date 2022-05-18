@@ -6,7 +6,7 @@ Spiking Neurons is an experimental interactive visualization of a spiking neural
 
 ## Instructions
 
-- Open web browser and navigate to `http://public.beuth-hochschule.de/~s85393/deep-learning/spiking-neurons/`
+- Open spiking <a href="http://public.beuth-hochschule.de/~s85393/deep-learning/spiking-neurons/"  target="_blank">neuronal network simulator</a> in web browser
 - Set network paramaters or use default parameters (for parameter description see section `Spiking Neural Network`)
 - Click `Initialize Network` to initialize network data structure
 - Click `Render Network` to render network visualization
