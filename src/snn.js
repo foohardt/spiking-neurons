@@ -11,17 +11,6 @@ const LEARNING_PERIOD = 60 * 1000;
 
 export class NeuralNetwork extends EventEmitter {
 
-    // Initialize neural network
-    // Either using size or network definition
-    // new NeuralNetwork(20);
-    // new NeuralNetwork({ nodes: [
-    //   {id: 1, s: [{t: 1, w: 0.41}] }, 
-    //   {id: 2, s: [{t: 2, w: 0.020}, {t: 3, w: 0.135}] },
-    //   {id: 3, s: [{t: 5, w: 0.241}] }, 
-    //   {id: 4, s: [{t: 1, w: 0.02}] }, 
-    //   {id: 5, s: [{t: 6, w: 0.92}, {t: 2, w: 0.41}] },
-    //   {id: 6, s: [{t: 2, w: 0.41}] }
-    // ]})
     constructor(size, shape, synapseAvgPerNeuron, signalMaxFireDelay, signalRecoveryDelay, signalFireThreshold) {
         super();
         this.shape = shape || NETWORK_DEFAULT_SHAPE;
@@ -47,110 +36,18 @@ export class NeuralNetwork extends EventEmitter {
         }
         // Extra initialization per neuron
         this.nodes.forEach(neuron => {
-            neuron.on('fire', id => this.emit('fire', id));
+            neuron.on('spike', id => this.emit('spike', id));
             // Add synapse ref pointers to corresponding target neurons
             neuron.synapses.forEach(synapse => {
                 synapse.t = this.nodes[synapse.i];
             })
         });
-        // this.on('fire', id => console.log(id));
-    }
-
-    // Clones network, useful to mutating network to determine fittest alternative
-    // network.clone()
-    clone() {
-        return new NeuralNetwork(this.export());
-    }
-
-    // Exports network, useful for cloning and saving to disk
-    // network.export()
-    export() {
-        return {
-            nodes: this.nodes.map(node => Object({
-                id: node.id,
-                s: node.synapses
-                    .slice()
-                    // Remove circular ref pointers
-                    .map(s => Object({ t: s.i, w: s.w }))
-            })),
-            // Clone array of arrays
-            channels: this.channels.map(channel => channel.slice())
-        }
-    }
-
-    // Reinforces synapses that fire recently
-    // network.learn()
-    learn(rate) {
-        var start = new Date().getTime() - LEARNING_PERIOD;
-        this.synapses
-            .forEach(s => {
-                var recency = s.l - start;
-                if (recency > 0) {
-                    s.w += (recency / LEARNING_PERIOD) * (rate || LEARNING_RATE);
-                    s.w = s.w < 0 ? 0 : s.w;
-                    s.w = s.w > 1 ? 1 : s.w;
-                }
-            });
-    }
-
-    // Weakens synapses that fired recently
-    // network.unlearn()
-    unlearn(rate) {
-        this.learn(-1 * (rate || LEARNING_RATE));
-    }
-
-    // Each channel defaults to 32 bits (neurons) to process
-    // network.channel() -> next available at 32 bits
-    // network.channel(16) -> next available at 16 bits
-    // network.channel(16, 2) -> slot 2 at 16 bits
-    // network.channel([2,3,4,5,6,7], 2) -> slot 2 with array of predefined nodes
-    channel(bits, index) {
-        var index = index || this.channels.length,
-            bits = typeof bits === 'number' ? bits : 32,
-            nodes = bits instanceof Array ? bits : undefined;
-        if (!nodes) {
-            // Find starting point and add nodes to channel
-            var start = this.channels.reduce((a, c) => a + c.length, 0);
-            nodes = new Array(bits).fill().map((n, i) => start + i);
-        }
-        this.channels[index] = nodes;
-        return nodes;
-    }
-
-    // Input some data into the neural network
-    // network.input('hello')
-    input(data, channelIndex) {
-        var bytes,
-            nodes = this.channels[channelIndex || 0] || this.channel();
-        if (nodes && nodes.length) {
-            if (typeof data === 'number' && data.toString(2).length <= 32) {
-                bytes = data.toString(2).split('');
-            }
-            else {
-                if (typeof data !== 'string') {
-                    data = String(data);
-                }
-                bytes = Utils.hash(data).toString(2).split('');
-            }
-            while (bytes.length < 32) {
-                bytes.unshift('0');
-            }
-            // Apply bits in data to each neuron listed under inputs
-            // 1 = fire neuron, 0 = skip
-            bytes.forEach((byte, i) => {
-                var node = this.nodes[nodes[i]];
-                if (byte === '1' && node) {
-                    node.fire();
-                }
-            });
-            return bytes.join('');
-        }
     }
 
     // Fire a neuron, used for testing and visualization
-    fire(id) {
+    spike(id) {
         if (id && this.nodes[id]) {
-            this.nodes[id].fire();
+            this.nodes[id].spike();
         }
     }
 
@@ -208,7 +105,7 @@ class Neuron extends EventEmitter {
     }
 
     // Should be optimised as this gets executed very frequently.
-    fire(potential) {
+    spike(potential) {
         if (this.isfiring) return false;
         // Action potential is accumulated so that
         // certain patterns can trigger even
@@ -218,13 +115,13 @@ class Neuron extends EventEmitter {
         if (this.potential > this.signalFireThreshold) {
             // Fire signal
             this.isfiring = true;
-            this.emit('fire', this.id);
+            this.emit('spike', this.id);
             this.synapses.forEach(synapse => {
                 if (synapse.t) {
                     // Stronger connections will fire quicker
                     // @see Conduction Velocity: https://faculty.washington.edu/chudler/cv.html
                     synapse.c = setTimeout(() => {
-                        if (synapse.t.fire(synapse.w)) {
+                        if (synapse.t.spike(synapse.w)) {
                             // Avoid epileptic spasm by tracking when last fired
                             synapse.l = new Date().getTime();
                         }
@@ -245,9 +142,7 @@ class Neuron extends EventEmitter {
 }
 
 class NetworkShapes {
-
-    // Random ball shape
-    // (neurons linked at random)
+    // Random ball shape (neurons linked at random)
     static ball(position, size) {
         var i = Random.integer(0, size);
         if (i !== position) {
@@ -327,7 +222,6 @@ class NetworkShapes {
 }
 
 class Random {
-
     // Inclusive random integers
     static integer(from, to) {
         if (!from && !to) return 0;
@@ -346,21 +240,4 @@ class Random {
         } while (length > 0 && output.length < length)
         return output;
     }
-}
-
-class Utils {
-
-    // Fast string hashing algorithm
-    // Converts string to int predictably
-    static hash(str) {
-        var char, hash = 0;
-        if (!str) return hash;
-        for (var i = 0; i < str.length; i++) {
-            char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return hash;
-    }
-
 }

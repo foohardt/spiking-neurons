@@ -110,10 +110,10 @@ const NetworkSimulator = () => {
   };
 
   const handleNodeClick = (node) => {
-    network.fire(node.id);
+    network.spike(node.id);
 
     for (const node of network.nodes) {
-      node.on("fire", (id) => {
+      node.on("spike", (id) => {
         nodesOnFire.add(id);
       });
 
@@ -135,11 +135,6 @@ const NetworkSimulator = () => {
     }
   };
 
-  const learn = () => {
-    console.log(network.learn(1));
-  };
-
-  const NODE_R = 8;
   return (
     <div className="container-fluid">
       <div id="network-controls" className="d-flex justify-content-center">
@@ -215,7 +210,6 @@ const NetworkSimulator = () => {
           <button className="btn btn-danger ms-1" onClick={stopNetowrk}>
             Stop Network Activity
           </button>
-          <button onClick={learn}>Lernen</button>
         </span>
       </div>
       <div className="d-flex justify-content-center mt-3">
@@ -242,7 +236,7 @@ const NetworkSimulator = () => {
         graphData={graphData}
         nodeLabel="id"
         nodeColor={paintNode}
-        nodeRelSize={NODE_R}
+        nodeRelSize={8}
         linkDirectionalParticles="value"
         linkDirectionalParticleSpeed={(d) => d.value * 0.01}
         onNodeClick={handleNodeClick}
