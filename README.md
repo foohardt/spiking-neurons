@@ -55,6 +55,6 @@ Name | Type | Description |
 Name | Type | Description | 
 --- | --- | --- | 
 `createGraphData(network)` | Function | Takes the spiking neural network as parameter. Maps neurons and their attributes to force graph data | 
-`NetworkSimulator()` | React Component | Instantiates spiking neural Network and holds application state. Implements user interface and user interaction. Render 2D force graph |
+`NetworkSimulator()` | React Component | Creates an instance of `NeuralNetwork` and holds application state. Implements user interface and user interaction. Renders 2D force graph |
 
 ## Experiments & Results
