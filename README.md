@@ -4,7 +4,11 @@
 
 Spiking Neurons is an experimental interactive visualization of a spiking neural network run in the web browser.
 
-## Dependencies
+## Technical Documentation
+
+This section provides an overview about the technical setup of the project. Project depedencies are listed and crucial components, functions and attributes are explained.
+
+### Dependencies
 
 This section contains a list of all project dependencies. Dependencies can be found as well in the project's `package.json` file.
 
@@ -15,13 +19,9 @@ react-force-graph-2d | react-force-graph-2d is graphical library to render a par
 Bootswatch | Bootswatch is a CSS library containing free themes for Bootstrap. In this project Bootswatch is used to style the user interface and UI components in a convenient way | https://bootswatch.com/ |
 events | events is a library, which implements the Node.js events module for the browser environment. In this project events is used to implement the neural network and it's neurons as event emitters | https://github.com/browserify/events#readme |
 
-## Technical Documentation
-
-This section contains an overview about crucial project components and their crucial functions and attributes. 
-
 ### Spiking Neural Network
 
-The spiking neural network is implented in `snn.js`. Network and neurons are implemented as JavaScript classes. Both extend the classs `EventEmitter` and contain functions to emit events, which can be listened on. 
+The spiking neural network is implented in `snn.js`. Network and neurons are implemented as JavaScript classes. Both extend the classs `EventEmitter` and contain functions to emit events, which can be listened on and interacted with. 
 
 #### NeuralNetwork
 
@@ -36,7 +36,6 @@ Name | Type | Description |
 `signalFireThreshold` | Class Variable | Neuronal threshold for action potential |
 `fire(id)` | Function | Function to fire a certain neuron. Can be used to fire neurons and create spikes |
 `stop()` | Function | Function to stop ongoing network activity from spiking | 
-
 
 #### Neuron
 
@@ -56,6 +55,6 @@ Name | Type | Description |
 Name | Type | Description | 
 --- | --- | --- | 
 `createGraphData(network)` | Function | Takes the spiking neural network as parameter. Maps neurons and their attributes to force graph data | 
-`NetworkSimulator() | React Component | Instantiates spiking neural Network and holds application state. Implements user interface and user interaction. Render 2D force graph |
+`NetworkSimulator()` | React Component | Instantiates spiking neural Network and holds application state. Implements user interface and user interaction. Render 2D force graph |
 
 ## Experiments & Results
