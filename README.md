@@ -58,3 +58,9 @@ Name | Type | Description |
 `NetworkSimulator()` | React Component | Creates an instance of `NeuralNetwork` and holds application state. Implements user interface and user interaction. Renders 2D force graph |
 
 ## Experiments & Results
+
+a) Experiment with different densities and strengths of networks (synapses). 
+
+b) What influence does the initial excitation of the network have on the final state.
+
+c) What other dynamics besides saturation and drying up of activity is possible in principle? Do you succeed in generating such a dynamic?
