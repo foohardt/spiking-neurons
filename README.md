@@ -76,7 +76,7 @@ Name | Type | Description |
 
 ## Experiments & Results
 
-a) Experiment with different densities and strengths of networks (synapses) 
+**a) Experiment with different densities and strengths of networks (synapses)**
 
 In the present experiment, the network was initialized with different combinations of parameters. In general, it can be stated that the number of synapses in the network has a significant influence on the spiking behavior. The more synapses there are in the network, i.e. the more neurons are interconnected, the more spikes are generated. 
 
@@ -86,11 +86,11 @@ As a result, it can be stated that the spiking behavior depends on the neuronal 
 
 The available findings can be reproduced in the simulator by means of appropriate parameterization as mentioned in this section.
 
-b) What influence does the initial excitation of the network have on the final state.
+**b) What influence does the initial excitation of the network have on the final state?**
 
 The initial excitation has a non-linear relationship with the further behavior of the neuronal network. This means, for example, that an initial excitation may dry up if the neurons it passes through are not connected to other neurons via synapses, or if the action potential is not sufficient to excite further neurons connected. 
 
-c) What other dynamics besides saturation and drying up of activity is possible in principle? Do you succeed in generating such a dynamic?
+**c) What other dynamics besides saturation and drying up of activity is possible in principle? Do you succeed in generating such a dynamic?**
 
 Besides the dynamics of saturation and drying of signals, a kind of oversaturation could be observed in the simulator. 
 
